@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Συγγραφή Ομιλίας (Γυμνάσιο)</title>
+  <!-- Import Comfortaa font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comfortaa', Arial, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    .creator-info {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: gold;
+      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7);
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #111111;
+      border-radius: 10px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.7);
+      border: 2px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .accordion {
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      transition: all 0.3s ease-in-out;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    .accordion:hover {
+      background-color: #666;
+    }
+    .panel {
+      display: none;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+      margin-top: 5px;
+      background-color: #222;
+    }
+    .panel p, .panel ul {
+      margin: 0;
+      padding: 0;
+    }
+    /* Color-coded sections: Prosfonisi, Prologos, KyrioThema, Epilogos */
+    .prosfonisi { background-color: #B30000; }
+    .prologos { background-color: #B36B00; }
+    .mainbody { background-color: #8C00B3; } /* or rename to 'kyrioThema' if you prefer */
+    .epilogos { background-color: #006BB3; }
+
+    .button {
+      display: inline-block;
+      padding: 12px;
+      margin: 5px 0;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    /* Topic container styling */
+    .topic-container {
+      margin-top: 20px;
+      background-color: #B30000;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 8px 15px rgba(0,0,0,0.7);
+      text-align: center;
+    }
+    #randomTopic {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      min-height: 50px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      margin-bottom: 10px;
+    }
+    /* Additional sub-panels for each stage's suggestions */
+    .suggestions-panel {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      min-height: 50px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      margin-top: 10px;
+      text-align: left;
+    }
+    .essay-section {
+      margin-top: 20px;
+      background-color: #006BB3;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 8px 15px rgba(0,0,0,0.7);
+    }
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      color: #000;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    /* Popup styling for Language Help */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      background: #ffffff;
+      padding: 20px;
+      box-shadow: 0 8px 12px rgba(0,0,0,0.4);
+      border-radius: 10px;
+      z-index: 1000;
+      overflow-y: auto;
+      max-height: 80vh;
+      color: #000000;
+    }
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      margin-top: -10px;
+    }
+    .popup h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="creator-info">Δημιουργία: Παναγιώτης Δόμβρος 2025 (CC BY-NC)</div>
+
+<h1>🎤 Συγγραφή Ομιλίας στο Γυμνάσιο</h1>
+
+<!-- Container for the four sections (Prosfonisi, Prologos, Kyrio Thema, Epilogos) -->
+<div class="container">
+    <button class="accordion prosfonisi">1️⃣ Προσφώνηση</button>
+    <div class="panel">
+        <p>📌 Καλωσορίστε το κοινό σας. Π.χ. “Αξιότιμε κ.Διευθυντά, αγαπητοί καθηγητές και μαθητές” ή “Κυρίες και κύριοι...”</p>
+        <p><em>«Καλημέρα σας, αγαπητοί συμμαθητές, καθηγητές και γονείς. Ευχαριστώ που βρίσκεστε εδώ...»</em></p>
+    </div>
+
+    <button class="accordion prologos">2️⃣ Πρόλογος</button>
+    <div class="panel">
+        <p>📌 Αναφέρετε γενικά το θέμα που θα παρουσιάσετε. Δημιουργήστε ενδιαφέρον.</p>
+        <p><em>«Σήμερα θα σας μιλήσω για την αξία της ομαδικής συνεργασίας στη σχολική ζωή...». </em></p>
+    </div>
+
+    <button class="accordion mainbody">3️⃣ Κυρίως Θέμα</button>
+    <div class="panel">
+        <p>📌 Αναλύστε τα επιχειρήματά σας, προτάξτε τα βασικά σημεία, αποδείξεις ή παραδείγματα.</p>
+        <p><em>«Η ομαδικότητα ενισχύει την αλληλοβοήθεια, μειώνει το άγχος και βελτιώνει τα αποτελέσματα σε project...»</em></p>
+    </div>
+
+    <button class="accordion epilogos">4️⃣ Επίλογος</button>
+    <div class="panel">
+        <p>📌 Κλείσιμο της ομιλίας, υπογράμμιση των συμπερασμάτων & αποφώνηση (“Σας ευχαριστώ”).</p>
+        <p><em>«Κλείνοντας, θα ήθελα να σας παροτρύνω να δείτε πόσο η συνεργασία εμπλουτίζει τη σχολική μας καθημερινότητα. Σας ευχαριστώ!»</em></p>
+    </div>
+</div>
+
+<!-- Button for Language Help Popup -->
+<div class="container">
+    <button class="button" onclick="openPopup()">📚 Γλωσσική Βοήθεια</button>
+</div>
+
+<!-- Popup for Language Help -->
+<div id="overlay" class="overlay"></div>
+<div id="popup" class="popup">
+    <span class="close" onclick="closePopup()">&times;</span>
+    <h2>📖 Γλωσσική Βοήθεια</h2>
+    <p><strong>Ενδεικτικές φράσεις &amp; επίθετα για ομιλία σε σχολικό πλαίσιο</strong></p>
+
+    <h3>Προσφώνηση</h3>
+    <ul>
+        <li>«Αγαπητοί συμμαθητές και αγαπητοί καθηγητές…»</li>
+        <li>«Κυρίες και κύριοι, φίλες και φίλοι…»</li>
+        <li>«Αξιότιμε κ.Διευθυντά, αγαπητοί εκπαιδευτικοί και συμμαθητές…»</li>
+    </ul>
+    <p><strong>Επίθετα/Φράσεις:</strong> αξιότιμος, αξιότιμη κοινότητα, σεβαστός, «ευχαριστώ θερμά για την παρουσία σας»</p>
+
+    <h3>Πρόλογος</h3>
+    <ul>
+        <li>«Σήμερα θα μιλήσω για…»</li>
+        <li>«Το θέμα που θα μας απασχολήσει αφορά…»</li>
+        <li>«Αποφάσισα να αναφερθώ σε αυτό, γιατί…»</li>
+    </ul>
+    <p><strong>Επίθετα/Φράσεις:</strong> σημαντικός, επίκαιρος, ενδιαφέρων, «που αγγίζει όλους μας», «ένα ζήτημα με πολλές προεκτάσεις»</p>
+
+    <h3>Κυρίως Θέμα</h3>
+    <ul>
+        <li>«Ας δούμε αναλυτικά ποιες είναι οι βασικές διαστάσεις του…»</li>
+        <li>«Θα ήθελα να παρουσιάσω ορισμένα παραδείγματα/στοιχεία…»</li>
+        <li>«Είναι βασικό να κατανοήσουμε ότι…»</li>
+    </ul>
+    <p><strong>Επίθετα/Φράσεις:</strong> ουσιαστικός, καθοριστικός, «θεμελιώδης παράγοντας», «βασική προτεραιότητα»</p>
+
+    <h3>Επίλογος</h3>
+    <ul>
+        <li>«Συνοψίζοντας όσα αναφέρθηκαν…»</li>
+        <li>«Καλώ όλους σας να σκεφτείτε…»</li>
+        <li>«Θα κλείσω λέγοντας ότι…»</li>
+    </ul>
+    <p><strong>Επίθετα/Φράσεις:</strong> «με αυτόν τον τρόπο μπορούμε να…», «ας ενώσουμε τις δυνάμεις μας…», «σας ευχαριστώ που μ’ ακούσατε»</p>
+
+    <h3>Γενικές Συνδετικές Φράσεις</h3>
+    <ul>
+        <li>«Αρχικά…, στη συνέχεια…, παράλληλα…, τέλος…»</li>
+        <li>«Επομένως…, συνεπώς…, ωστόσο…, παρόλα αυτά…»</li>
+        <li>«Από τη μία πλευρά…, από την άλλη πλευρά…»</li>
+    </ul>
+</div>
+
+<!-- Container for 20 random speech topics, each with stage-based suggestions -->
+<div class="container">
+    <h2 style="text-align: center;">🎲 Τυχαίο Θέμα για Ομιλία</h2>
+    <div style="text-align: center;">
+        <button class="button" onclick="generateRandomSpeech()">Δημιουργία Τυχαίου Θέματος</button>
+    </div>
+
+    <div class="topic-container">
+        <h3>📝 Θέμα Ομιλίας</h3>
+        <div id="randomTopic">Πατήστε το κουμπί για να λάβετε ένα τυχαίο θέμα.</div>
+
+        <!-- Prosfonisi suggestions -->
+        <div class="suggestions-panel" id="prosfonisiSugg">Προσφώνηση (θα εμφανιστούν ιδέες εδώ)</div>
+
+        <!-- Prologos suggestions -->
+        <div class="suggestions-panel" id="prologosSugg">Πρόλογος (θα εμφανιστούν ιδέες εδώ)</div>
+
+        <!-- KyrioThema suggestions -->
+        <div class="suggestions-panel" id="kyrioThemaSugg">Κυρίως Θέμα (θα εμφανιστούν ιδέες εδώ)</div>
+
+        <!-- Epilogos suggestions -->
+        <div class="suggestions-panel" id="epilogosSugg">Επίλογος (θα εμφανιστούν ιδέες εδώ)</div>
+    </div>
+
+    <div class="essay-section">
+        <h3>📝 Συγγραφή Ομιλίας</h3>
+        <textarea id="speechText" placeholder="Γράψτε εδώ την ομιλία σας..."></textarea>
+        <button class="button" onclick="copyAndSubmit()">📋 Αντιγραφή & Υποβολή</button>
+    </div>
+</div>
+
+<script>
+  // Expandable sections for the four main parts
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      let panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+
+  // Overlay & Popup for Language Help
+  function openPopup() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popup").style.display = "block";
+  }
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popup").style.display = "none";
+  }
+
+  // 20 random speech topics, each with stage-based suggestions
+  const speechTopics = [
+    {
+      topic: "Η σημασία του εθελοντισμού στους νέους",
+      prosfonisi: [
+        "Αγαπητοί συμμαθητές, αγαπητοί καθηγητές...",
+        "Κυρίες και κύριοι, θα ήθελα να σας καλωσορίσω..."
+      ],
+      prologos: [
+        "Στόχος μου είναι να μιλήσω για την προσφορά και τα οφέλη του εθελοντισμού...",
+        "Ένα θέμα που μας αφορά όλους, καθώς ο εθελοντισμός χτίζει χαρακτήρες..."
+      ],
+      kyrioThema: [
+        "Περιγράψτε πώς ο εθελοντισμός ενδυναμώνει τον κοινωνικό ιστό στο σχολείο.",
+        "Παρουσιάστε παραδείγματα από δράσεις: συγκέντρωση τροφίμων, δενδροφυτεύσεις..."
+      ],
+      epilogos: [
+        "Κλείστε καλώντας τους συμμαθητές να συμμετάσχουν σε κάποια εθελοντική ομάδα.",
+        "Τονίστε τη φράση “Όλοι μπορούμε να κάνουμε τη διαφορά.”"
+      ]
+    },
+    {
+      topic: "Ο ρόλος των ψηφιακών μέσων στη σχολική εκπαίδευση",
+      prosfonisi: [
+        "Καλημέρα σας, αγαπητοί καθηγητές και μαθητές...",
+        "Κυρίες και κύριοι, σήμερα θα ήθελα να σας μιλήσω..."
+      ],
+      prologos: [
+        "Η τεχνολογία έχει εισβάλει δυναμικά στη ζωή μας...",
+        "Στο σχολείο, οι ηλεκτρονικές συσκευές μπορούν να γίνουν σύμμαχος μας..."
+      ],
+      kyrioThema: [
+        "Συζητήστε θετικά και αρνητικά: εύκολη πληροφορία vs περισπασμός.",
+        "Παραδείγματα: ψηφιακές πλατφόρμες, e-books, εφαρμογές."
+      ],
+      epilogos: [
+        "Κλείσιμο: ενθαρρύνετε την ισορροπημένη χρήση της τεχνολογίας.",
+        "Μικρή φράση: “Ας αξιοποιήσουμε τις ψηφιακές δυνατότητες υπεύθυνα.”"
+      ]
+    },
+    // ... (συμπληρώστε άλλα 18 θέματα, με prosfonisi/prologos/kyrioThema/epilogos) ...
+    {
+      topic: "Πώς μπορούμε να καταπολεμήσουμε το άγχος των εξετάσεων",
+      prosfonisi: [
+        "Καλησπέρα σας, αγαπητά μέλη της σχολικής μας κοινότητας...",
+        "Αγαπητοί συμμαθητές και καθηγητές, σας χαιρετώ..."
+      ],
+      prologos: [
+        "Όλοι έχουμε βιώσει την πίεση των διαγωνισμάτων και εξετάσεων...",
+        "Στόχος μου είναι να δείξω ότι το άγχος μπορεί να γίνει διαχειρίσιμο..."
+      ],
+      kyrioThema: [
+        "Παρουσιάστε τεχνικές χαλάρωσης, οργάνωση χρόνου.",
+        "Δώστε παραδείγματα από προσωπικές εμπειρίες ή έρευνες."
+      ],
+      epilogos: [
+        "Τονίστε ότι ένα ήρεμο μυαλό αποδίδει καλύτερα.",
+        "Κλείστε με προτροπή: “Ας στηρίξουμε ο ένας τον άλλον στην περίοδο εξετάσεων.”"
+      ]
+    }
+  ];
+
+  function generateRandomSpeech() {
+    const randomIndex = Math.floor(Math.random() * speechTopics.length);
+    const chosen = speechTopics[randomIndex];
+
+    // Fill in the content
+    document.getElementById('randomTopic').textContent = chosen.topic;
+    document.getElementById('prosfonisiSugg').innerHTML =
+      "<strong>Προσφώνηση:</strong><br><ul><li>" + chosen.prosfonisi.join("</li><li>") + "</li></ul>";
+    document.getElementById('prologosSugg').innerHTML =
+      "<strong>Πρόλογος:</strong><br><ul><li>" + chosen.prologos.join("</li><li>") + "</li></ul>";
+    document.getElementById('kyrioThemaSugg').innerHTML =
+      "<strong>Κυρίως Θέμα:</strong><br><ul><li>" + chosen.kyrioThema.join("</li><li>") + "</li></ul>";
+    document.getElementById('epilogosSugg').innerHTML =
+      "<strong>Επίλογος:</strong><br><ul><li>" + chosen.epilogos.join("</li><li>") + "</li></ul>";
+  }
+
+  // Copy & Submit logic
+  function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert('Η ομιλία σας αντιγράφηκε (fallback)!');
+    } catch (err) {
+      alert('Αποτυχία αντιγραφής ακόμη και με fallback.');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function copyAndSubmit() {
+    const speechText = document.getElementById('speechText').value;
+    if (!speechText) {
+      // If no text, just open Tally
+      window.open('https://tally.so/r/meY48e', '_blank');
+      return;
+    }
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(speechText)
+        .then(() => {
+          alert('Η ομιλία σας αντιγράφηκε στο πρόχειρο!');
+          window.open('https://tally.so/r/meY48e', '_blank');
+        })
+        .catch(err => {
+          console.error('Σφάλμα αντιγραφής:', err);
+          fallbackCopyTextToClipboard(speechText);
+          window.open('https://tally.so/r/meY48e', '_blank');
+        });
+    } else {
+      fallbackCopyTextToClipboard(speechText);
+      window.open('https://tally.so/r/meY48e', '_blank');
+    }
+  }
+</script>
+</body>
+</html>
